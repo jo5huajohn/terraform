@@ -5,9 +5,5 @@ provider "proxmox" {
   ssh {
     agent    = true
     username = "root"
-    node {
-      name    = "pve01"
-      address = var.virtual_environment_ip
-    }
   }
 }
