@@ -6,7 +6,7 @@ provider "proxmox" {
     agent    = true
     username = "root"
     node {
-      name    = "pve"
+      name    = "pve01"
       address = var.virtual_environment_ip
     }
   }

@@ -1,0 +1,22 @@
+#cloud-config
+hostname: ubuntu
+timezone: America/Chicago
+allow_public_ssh_keys: true
+users:
+  - default
+  - name: tf
+    groups:
+      - sudo
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAk1Ebt3ZMranSa7Rl73iRiIYfm0XEXVAu6lBR7bhPYl reseau@pve
+    sudo: ALL=(ALL) NOPASSWD:ALL
+package_update: true
+packages:
+  - curl
+  - net-tools
+  - qemu-guest-agent
+runcmd:
+  - systemctl enable qemu-guest-agent
+  - systemctl start qemu-guest-agent
+  - echo "done" > /tmp/cloud-config.done

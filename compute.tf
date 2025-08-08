@@ -1,97 +1,172 @@
 data "local_file" "ssh_public_key" {
   filename = "./reseau.pub"
-} 
-
-resource "proxmox_virtual_environment_download_file" "ubuntu_noble_cloud_image" {
-  content_type = "import"
-  datastore_id = "local"
-  node_name    = "pve"
-  url          = "https://cloud-images.ubuntu.com/minimal/releases/noble/release/ubuntu-24.04-minimal-cloudimg-amd64.img"
-  file_name    = "noble-minimal-cloudimg-amd64.qcow2"
-}
-
-resource "proxmox_virtual_environment_file" "user_data_cloud_config" {
-  content_type = "snippets"
-  datastore_id = "local"
-  node_name    = "pve"
-
-  source_raw {
-    data = <<-EOF
-    #cloud-config
-    hostname = "ubuntu"
-    timezone: America/Chicago
-    users:
-      - default
-      - name: admin
-        groups:
-          - sudo
-        shell: /bin/bash
-        ssh_authorized_keys:
-          - ${trimspace(data.local_file.ssh_public_key.content)}
-        sudo: ALL=(ALL) NOPASSWD:ALL
-    package_update: true
-    packages:
-      - qemu-guest-agent
-    runcmd:
-      - systemctl enable qemu-guest-agent
-      - systemctl start qemu-guest-agent
-      - echo "done" > /tmp/cloud-config.done
-    EOF
-
-    file_name = "user-data-cloud-config.yaml"
-  }
 }
 
 resource "proxmox_virtual_environment_vm" "immich_vm" {
-  name      = "immich-vm"
-  node_name = "pve"
+  name      = "immich"
+  node_name = "pve01"
 
-  started  = true
-
-  machine = "q35"
-  bios    = "ovmf"
-
-  agent {
-    enabled = true
+  clone {
+    vm_id = proxmox_virtual_environment_vm.ubuntu_noble_cloud_image_template.id
   }
 
   cpu {
     cores = 3
   }
 
-  efi_disk {
-    datastore_id = "vms"
-    type         = "4m"
-  }
-
   disk {
-    datastore_id = "vms"
-    import_from  = proxmox_virtual_environment_download_file.ubuntu_noble_cloud_image.id
-    interface    = "virtio0"
+    datastore_id = "pve1"
+    interface    = "scsi1"
     iothread     = true
     discard      = "on"
-    size         = 32
+    size         = 128
   }
 
   initialization {
     datastore_id = "vms"
-    interface    = "scsi2"
-
     ip_config {
       ipv4 {
         address = "dhcp"
       }
     }
-
-    user_data_file_id = proxmox_virtual_environment_file.user_data_cloud_config.id
   }
 
   memory {
     dedicated = 6144
   }
 
-  network_device {
-    bridge = "vmbr0"
+}
+
+resource "proxmox_virtual_environment_vm" "mealie_vm" {
+  name      = "mealie"
+  node_name = "pve01"
+
+  clone {
+    vm_id = proxmox_virtual_environment_vm.ubuntu_noble_cloud_image_template.id
+  }
+
+  cpu {
+    cores = 1
+  }
+
+  initialization {
+    datastore_id = "vms"
+    ip_config {
+      ipv4 {
+        address = "dhcp"
+      }
+    }
   }
 
 }
+
+resource "proxmox_virtual_environment_container" "nextcloud_container" {
+  node_name = "pve01"
+  
+  cpu {
+    cores = 2
+  }
+
+  disk {
+    datastore_id = "vms"
+    size         = 20
+  }
+
+  initialization {
+    hostname = "nextcloud"
+    ip_config {
+      ipv4 {
+        address = "dhcp"
+      }
+    }
+    user_account {
+      keys = [
+        trimspace(data.local_file.ssh_public_key.content)
+      ]
+      password = "4452218"
+    }
+  }
+
+  memory {
+    dedicated = 6144
+  }
+
+  mount_point {
+    backup = true
+    volume = "pve1"
+    path   = "/srv/nextcloud"
+    size   = "128G"
+  }
+
+  network_interface {
+    name = "veth0"
+  }
+
+  operating_system {
+    template_file_id = "local:vztmpl/debian-12-standard_12.7-1_amd64.tar.zst"
+    type             = "debian"
+  }
+
+  unprivileged = true
+
+  features {
+    nesting = true
+  }
+
+}
+
+resource "proxmox_virtual_environment_container" "paperless_ngx_container" {
+  node_name = "pve01"
+  
+  cpu {
+    cores = 2
+  }
+
+  disk {
+    datastore_id = "vms"
+    size         = 20
+  }
+
+  initialization {
+    hostname = "paperless-ngx"
+    ip_config {
+      ipv4 {
+        address = "dhcp"
+      }
+    }
+    user_account {
+      keys = [
+        trimspace(data.local_file.ssh_public_key.content)
+      ]
+      password = "4452218"
+    }
+  }
+
+  memory {
+    dedicated = 4096
+  }
+
+  mount_point {
+    backup = true
+    volume = "pve1"
+    path   = "/mnt/paperless-ngx"
+    size   = "64G"
+  }
+
+  network_interface {
+    name = "veth0"
+  }
+
+  operating_system {
+    template_file_id = "local:vztmpl/debian-12-standard_12.7-1_amd64.tar.zst"
+    type             = "debian"
+  }
+
+  unprivileged = true
+
+  features {
+    nesting = true
+  }
+
+}
+
