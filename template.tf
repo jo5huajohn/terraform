@@ -21,9 +21,11 @@ resource "proxmox_virtual_environment_vm" "ubuntu_noble_cloud_image_template" {
   name      = "ubuntu-noble-template"
   node_name = "pve01"
 
-  template = true
-  started  = false
+  template        = true
+  started         = false
+  stop_on_destroy = true
 
+  bios          = "ovmf"
   machine       = "q35"
   scsi_hardware = "virtio-scsi-single"
 
@@ -45,6 +47,12 @@ resource "proxmox_virtual_environment_vm" "ubuntu_noble_cloud_image_template" {
     ssd          = true
   }
 
+  efi_disk {
+    datastore_id      = "vms"
+    type              = "4m"
+    pre_enrolled_keys = true
+  }
+
   initialization {
     datastore_id = "vms"
     ip_config {
@@ -59,8 +67,8 @@ resource "proxmox_virtual_environment_vm" "ubuntu_noble_cloud_image_template" {
     dedicated = 2048
   }
 
-  network_device {
-    bridge = "vmbr0"
+  serial_device {
+    device = "socket"
   }
 
 }
