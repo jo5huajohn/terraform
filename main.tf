@@ -35,6 +35,11 @@ resource "proxmox_virtual_environment_vm" "immich_vm" {
     dedicated = 6144
   }
 
+  network_device {
+    bridge      = "vmbr0"
+    mac_address = "BC:24:11:80:EF:3E"
+  }
+
 }
 
 resource "proxmox_virtual_environment_vm" "mealie_vm" {
@@ -45,10 +50,6 @@ resource "proxmox_virtual_environment_vm" "mealie_vm" {
     vm_id = proxmox_virtual_environment_vm.ubuntu_noble_cloud_image_template.id
   }
 
-  cpu {
-    cores = 1
-  }
-
   initialization {
     datastore_id = "vms"
     ip_config {
@@ -56,6 +57,15 @@ resource "proxmox_virtual_environment_vm" "mealie_vm" {
         address = "dhcp"
       }
     }
+  }
+
+  memory {
+    dedicated = 4096
+  }
+
+  network_device {
+    bridge      = "vmbr0"
+    mac_address = "BC:24:11:91:3D:3A"
   }
 
 }
@@ -99,7 +109,8 @@ resource "proxmox_virtual_environment_container" "nextcloud_container" {
   }
 
   network_interface {
-    name = "veth0"
+    name        = "veth0"
+    mac_address = "BC:24:11:50:65:8C"
   }
 
   operating_system {
@@ -154,7 +165,8 @@ resource "proxmox_virtual_environment_container" "paperless_ngx_container" {
   }
 
   network_interface {
-    name = "veth0"
+    name        = "veth0"
+    mac_address = "BC:24:11:0B:1A:05"
   }
 
   operating_system {
