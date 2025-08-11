@@ -4,7 +4,7 @@ timezone: America/Chicago
 allow_public_ssh_keys: true
 users:
   - default
-  - name: tf
+  - name: reseau
     groups:
       - sudo
     shell: /bin/bash
