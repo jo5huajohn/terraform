@@ -70,6 +70,51 @@ resource "proxmox_virtual_environment_vm" "mealie_vm" {
 
 }
 
+resource "proxmox_virtual_environment_container" "caddy_container" {
+  node_name = "pve01"
+
+  cpu {
+    cores = 1
+  }
+
+  disk {
+    datastore_id = "vms"
+    size         = 20
+  }
+
+  initialization {
+    hostname = "caddy"
+    ip_config {
+      ipv4 {
+        address = "dhcp"
+      }
+    }
+    user_account {
+      keys = [
+        trimspace(data.local_file.ssh_public_key.content)
+      ]
+      password = "4452218"
+    }
+  }
+
+  memory {
+    dedicated = 1024
+  }
+
+  network_interface {
+    name        = "veth0"
+    mac_address = "BC:24:11:89:4C:EE"
+  }
+
+  operating_system {
+    template_file_id = "local:vztmpl/debian-12-standard_12.7-1_amd64.tar.zst"
+    type             = "debian"
+  }
+
+  unprivileged = true
+
+}
+
 resource "proxmox_virtual_environment_container" "nextcloud_container" {
   node_name = "pve01"
   
