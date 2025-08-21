@@ -72,3 +72,50 @@ resource "proxmox_virtual_environment_vm" "ubuntu_noble_cloud_image_template" {
   }
 
 }
+
+resource "proxmox_virtual_environment_container" "debian_bookworm_lxc_template" {
+  node_name = "pve01"
+
+  template = true
+  started  = false
+
+  cpu {
+    cores = 1
+  }
+
+  disk {
+    datastore_id = "vms"
+    size         = 20
+  }
+
+  initialization {
+    hostname = "debian-bookworm-template"
+    ip_config {
+      ipv4 {
+        address = "dhcp"
+      }
+    }
+    user_account {
+      keys = [
+        trimspace(data.local_file.ssh_public_key.content)
+      ]
+      password = "4452218"
+    }
+  }
+
+  memory {
+    dedicated = 1024
+  }
+
+  operating_system {
+    template_file_id = "local:vztmpl/debian-12-standard_12.7-1_amd64.tar.zst"
+    type             = "debian"
+  }
+
+  unprivileged = true
+
+  features {
+    nesting = true
+  }
+
+}
