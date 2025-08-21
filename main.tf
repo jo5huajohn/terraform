@@ -32,7 +32,7 @@ resource "proxmox_virtual_environment_vm" "immich_vm" {
   }
 
   memory {
-    dedicated = 6144
+    dedicated = 8192
   }
 
   network_device {
@@ -73,13 +73,8 @@ resource "proxmox_virtual_environment_vm" "mealie_vm" {
 resource "proxmox_virtual_environment_container" "caddy_container" {
   node_name = "pve01"
 
-  cpu {
-    cores = 1
-  }
-
-  disk {
-    datastore_id = "vms"
-    size         = 20
+  clone {
+   vm_id = proxmox_virtual_environment_container.debian_bookworm_lxc_template.id
   }
 
   initialization {
@@ -89,16 +84,6 @@ resource "proxmox_virtual_environment_container" "caddy_container" {
         address = "dhcp"
       }
     }
-    user_account {
-      keys = [
-        trimspace(data.local_file.ssh_public_key.content)
-      ]
-      password = "4452218"
-    }
-  }
-
-  memory {
-    dedicated = 1024
   }
 
   network_interface {
@@ -106,25 +91,17 @@ resource "proxmox_virtual_environment_container" "caddy_container" {
     mac_address = "BC:24:11:89:4C:EE"
   }
 
-  operating_system {
-    template_file_id = "local:vztmpl/debian-12-standard_12.7-1_amd64.tar.zst"
-    type             = "debian"
-  }
-
-  unprivileged = true
-
 }
 
 resource "proxmox_virtual_environment_container" "nextcloud_container" {
   node_name = "pve01"
   
-  cpu {
-    cores = 2
+  clone {
+   vm_id = proxmox_virtual_environment_container.debian_bookworm_lxc_template.id
   }
 
-  disk {
-    datastore_id = "vms"
-    size         = 20
+  cpu {
+    cores = 2
   }
 
   initialization {
@@ -133,12 +110,6 @@ resource "proxmox_virtual_environment_container" "nextcloud_container" {
       ipv4 {
         address = "dhcp"
       }
-    }
-    user_account {
-      keys = [
-        trimspace(data.local_file.ssh_public_key.content)
-      ]
-      password = "4452218"
     }
   }
 
@@ -149,7 +120,7 @@ resource "proxmox_virtual_environment_container" "nextcloud_container" {
   mount_point {
     backup = true
     volume = "pve1"
-    path   = "/srv/nextcloud"
+    path   = "/mnt/ncdata"
     size   = "128G"
   }
 
@@ -158,43 +129,25 @@ resource "proxmox_virtual_environment_container" "nextcloud_container" {
     mac_address = "BC:24:11:50:65:8C"
   }
 
-  operating_system {
-    template_file_id = "local:vztmpl/debian-12-standard_12.7-1_amd64.tar.zst"
-    type             = "debian"
-  }
-
-  unprivileged = true
-
-  features {
-    nesting = true
-  }
-
 }
 
 resource "proxmox_virtual_environment_container" "paperless_ngx_container" {
   node_name = "pve01"
   
+  clone {
+   vm_id = proxmox_virtual_environment_container.debian_bookworm_lxc_template.id
+  }
+
   cpu {
     cores = 2
   }
 
-  disk {
-    datastore_id = "vms"
-    size         = 20
-  }
-
   initialization {
-    hostname = "paperless-ngx"
+    hostname = "paperless"
     ip_config {
       ipv4 {
         address = "dhcp"
       }
-    }
-    user_account {
-      keys = [
-        trimspace(data.local_file.ssh_public_key.content)
-      ]
-      password = "4452218"
     }
   }
 
@@ -205,24 +158,13 @@ resource "proxmox_virtual_environment_container" "paperless_ngx_container" {
   mount_point {
     backup = true
     volume = "pve1"
-    path   = "/mnt/paperless-ngx"
+    path   = "/mnt/paperless"
     size   = "64G"
   }
 
   network_interface {
     name        = "veth0"
     mac_address = "BC:24:11:0B:1A:05"
-  }
-
-  operating_system {
-    template_file_id = "local:vztmpl/debian-12-standard_12.7-1_amd64.tar.zst"
-    type             = "debian"
-  }
-
-  unprivileged = true
-
-  features {
-    nesting = true
   }
 
 }
