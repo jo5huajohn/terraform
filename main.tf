@@ -70,6 +70,37 @@ resource "proxmox_virtual_environment_vm" "mealie_vm" {
 
 }
 
+resource "proxmox_virtual_environment_container" "authentik_container" {
+  node_name = "pve01"
+
+  clone {
+   vm_id = proxmox_virtual_environment_container.debian_bookworm_lxc_template.id
+  }
+
+  cpu {
+    cores = 2
+  }
+
+  initialization {
+    hostname = "authentik"
+    ip_config {
+      ipv4 {
+        address = "dhcp"
+      }
+    }
+  }
+
+  memory {
+    dedicated = 4096
+  }
+
+  network_interface {
+    name        = "veth0"
+    mac_address = "BC:24:11:F7:C1:48"
+  }
+
+}
+
 resource "proxmox_virtual_environment_container" "caddy_container" {
   node_name = "pve01"
 
