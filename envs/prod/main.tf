@@ -26,6 +26,9 @@ resource "proxmox_virtual_environment_vm" "immich_vm" {
       ipv4 {
         address = "dhcp"
       }
+      ipv6 {
+        address = "auto"
+      }
     }
   
     user_data_file_id = proxmox_virtual_environment_file.cloud_config.id
@@ -55,6 +58,9 @@ resource "proxmox_virtual_environment_vm" "mealie_vm" {
     ip_config {
       ipv4 {
         address = "dhcp"
+      }
+      ipv6 {
+        address = "auto"
       }
     }
 
@@ -140,6 +146,9 @@ resource "proxmox_virtual_environment_container" "authentik_container" {
       ipv4 {
         address = "dhcp"
       }
+      ipv6 {
+        address = "auto"
+      }
     }
   }
 
@@ -167,6 +176,9 @@ resource "proxmox_virtual_environment_container" "caddy_container" {
       ipv4 {
         address = "dhcp"
       }
+      ipv6 {
+        address = "auto"
+      }
     }
   }
 
@@ -193,6 +205,9 @@ resource "proxmox_virtual_environment_container" "nextcloud_container" {
     ip_config {
       ipv4 {
         address = "dhcp"
+      }
+      ipv6 {
+        address = "auto"
       }
     }
   }
@@ -231,6 +246,9 @@ resource "proxmox_virtual_environment_container" "paperless_ngx_container" {
     ip_config {
       ipv4 {
         address = "dhcp"
+      }
+      ipv6 {
+        address = "auto"
       }
     }
   }
