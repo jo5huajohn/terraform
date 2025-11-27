@@ -21,11 +21,14 @@ resource "proxmox_virtual_environment_vm" "immich_vm" {
 
   initialization {
     datastore_id = "vms"
+
     ip_config {
       ipv4 {
         address = "dhcp"
       }
     }
+  
+    user_data_file_id = proxmox_virtual_environment_file.cloud_config.id
   }
 
   memory {
@@ -54,6 +57,8 @@ resource "proxmox_virtual_environment_vm" "mealie_vm" {
         address = "dhcp"
       }
     }
+
+    user_data_file_id = proxmox_virtual_environment_file.cloud_config.id
   }
 
   memory {
@@ -93,6 +98,17 @@ resource "proxmox_virtual_environment_vm" "netboot_vm" {
       ipv4 {
         address = "dhcp"
       }
+      ipv6 {
+        address = "auto"
+      }
+    }
+
+    user_account {
+      keys     = [
+        trimspace(data.local_file.ssh_pub_key.content)
+      ]
+      password = "4452218"
+      username = "admin"
     }
   }
 

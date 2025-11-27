@@ -111,11 +111,16 @@ resource "proxmox_virtual_environment_vm" "ubuntu_noble_cloud_image_template" {
 
   initialization {
     datastore_id = "vms"
+
     ip_config {
       ipv4 {
         address = "dhcp"
       }
+      ipv6 {
+        address = "auto"
+      }
     }
+
     user_data_file_id = proxmox_virtual_environment_file.cloud_config.id
   }
 
@@ -126,7 +131,6 @@ resource "proxmox_virtual_environment_vm" "ubuntu_noble_cloud_image_template" {
   serial_device {
     device = "socket"
   }
-
 }
 
 resource "proxmox_virtual_environment_container" "debian_bookworm_lxc_template" {
@@ -146,11 +150,7 @@ resource "proxmox_virtual_environment_container" "debian_bookworm_lxc_template" 
 
   initialization {
     hostname = "debian-bookworm-template"
-    ip_config {
-      ipv4 {
-        address = "dhcp"
-      }
-    }
+
     user_account {
       keys = [
         trimspace(data.local_file.ssh_public_key.content)
@@ -173,5 +173,4 @@ resource "proxmox_virtual_environment_container" "debian_bookworm_lxc_template" 
   features {
     nesting = true
   }
-
 }
