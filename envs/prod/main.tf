@@ -196,3 +196,112 @@ resource "proxmox_virtual_environment_container" "paperless_ngx_container" {
   }
 }
 
+locals {
+  workers = {
+    "virt-w01" = {
+      ip_address  = "10.42.20.30/24"
+      gateway     = "10.42.20.1"
+      dns_servers = [ "10.42.10.1" ]
+    }
+    "virt-w02" = {
+      ip_address  = "10.42.20.31/24"
+      gateway    = "10.42.20.1"
+      dns_servers = [ "10.42.10.1" ]
+    }
+  }
+}
+
+resource "proxmox_virtual_environment_file" "k8s_meta_data_cloud_config" {
+  for_each     = local.workers
+  content_type = "snippets"
+  datastore_id = "local"
+  node_name    = "pve01"
+
+  source_raw {
+    data = <<-EOF
+    #cloud-config
+    local-hostname: ${each.key}
+    EOF
+
+    file_name = "meta-data-cloud-config-${each.key}.yaml"
+  }
+}
+
+resource "proxmox_virtual_environment_vm" "k8s-worker-dev" {
+  for_each    = local.workers
+  name        = each.key
+  tags        = ["k8s", "k8s-worker", "dev"]
+  node_name = "pve01"
+
+  bios          = "ovmf"
+  machine       = "q35"
+  scsi_hardware = "virtio-scsi-single"
+
+  agent {
+    enabled = true
+  }
+
+  cpu {
+    cores = 4
+    type  = "x86-64-v2-AES"
+  }
+
+  disk {
+    datastore_id = "vms"
+    import_from  = proxmox_virtual_environment_download_file.fedora_cloud_43_cloud_image.id
+    interface    = "scsi0"
+    iothread     = true
+    discard      = "on"
+    size         = 128
+    ssd          = true
+  }
+
+  disk {
+    datastore_id = "pve1"
+    interface    = "scsi1"
+    iothread     = true
+    discard      = "on"
+    size         = 128
+  }
+  efi_disk {
+    datastore_id      = "vms"
+    type              = "4m"
+    pre_enrolled_keys = false
+  }
+
+  initialization {
+    datastore_id = "vms"
+    dns {
+      servers = each.value.dns_servers
+    }
+    
+    ip_config {
+      ipv4 {
+        address = each.value.ip_address
+	      gateway = each.value.gateway
+      }
+    }
+
+    user_account {
+      keys     = [
+        trimspace(data.local_file.ssh_pub_key.content)
+      ]
+      password = "4452218"
+      username = "admin"
+    }
+
+    meta_data_file_id = proxmox_virtual_environment_file.k8s_meta_data_cloud_config[each.key].id
+  }
+
+  operating_system {
+    type = "l26"
+  }
+
+  memory {
+    dedicated = 4096
+  }
+
+  network_device {
+    bridge = "vmbr0"
+  }
+}
