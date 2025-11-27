@@ -1,6 +1,7 @@
 resource "proxmox_virtual_environment_vm" "immich_vm" {
   name      = "immich"
   node_name = "pve01"
+  tags      = [ "app", "prod" ]
 
   clone {
     vm_id = proxmox_virtual_environment_vm.ubuntu_noble_cloud_image_template.id
@@ -40,6 +41,7 @@ resource "proxmox_virtual_environment_vm" "immich_vm" {
 resource "proxmox_virtual_environment_vm" "mealie_vm" {
   name      = "mealie"
   node_name = "pve01"
+  tags      = [ "app", "prod" ]
 
   clone {
     vm_id = proxmox_virtual_environment_vm.ubuntu_noble_cloud_image_template.id
@@ -66,6 +68,7 @@ resource "proxmox_virtual_environment_vm" "mealie_vm" {
 
 resource "proxmox_virtual_environment_container" "authentik_container" {
   node_name = "pve01"
+  tags      = [ "infra", "prod" ]
 
   clone {
    vm_id = proxmox_virtual_environment_container.debian_bookworm_lxc_template.id
@@ -96,6 +99,7 @@ resource "proxmox_virtual_environment_container" "authentik_container" {
 
 resource "proxmox_virtual_environment_container" "caddy_container" {
   node_name = "pve01"
+  tags      = [ "infra", "prod" ]
 
   clone {
    vm_id = proxmox_virtual_environment_container.debian_bookworm_lxc_template.id
@@ -118,6 +122,7 @@ resource "proxmox_virtual_environment_container" "caddy_container" {
 
 resource "proxmox_virtual_environment_container" "nextcloud_container" {
   node_name = "pve01"
+  tags      = [ "app", "prod" ]
 
   clone {
    vm_id = proxmox_virtual_environment_container.debian_bookworm_lxc_template.id
@@ -155,6 +160,7 @@ resource "proxmox_virtual_environment_container" "nextcloud_container" {
 
 resource "proxmox_virtual_environment_container" "paperless_ngx_container" {
   node_name = "pve01"
+  tags      = [ "app", "prod" ]
 
   clone {
    vm_id = proxmox_virtual_environment_container.debian_bookworm_lxc_template.id
