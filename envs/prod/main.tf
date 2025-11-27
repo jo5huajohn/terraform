@@ -66,7 +66,7 @@ resource "proxmox_virtual_environment_vm" "mealie_vm" {
   }
 }
 
-esource "proxmox_virtual_environment_vm" "netboot_vm" {
+resource "proxmox_virtual_environment_vm" "netboot_vm" {
   name      = "netboot"
   node_name = "pve01"
   tags      = [ "infra", "prod" ]
