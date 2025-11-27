@@ -2,45 +2,6 @@ data "local_file" "ssh_public_key" {
   filename = "./reseau.pub"
 }
 
-resource "proxmox_virtual_environment_vm" "forgejo_vm" {
-  name      = "forgejo"
-  node_name = "pve01"
-
-  clone {
-    vm_id = proxmox_virtual_environment_vm.ubuntu_noble_cloud_image_template.id
-  }
-
-  cpu {
-    cores = 2
-  }
-
-  disk {
-    datastore_id = "pve1"
-    interface    = "scsi1"
-    iothread     = true
-    discard      = "on"
-    size         = 64
-  }
-
-  initialization {
-    datastore_id = "vms"
-    ip_config {
-      ipv4 {
-        address = "dhcp"
-      }
-    }
-  }
-
-  memory {
-    dedicated = 2048
-  }
-
-  network_device {
-    bridge      = "vmbr0"
-    mac_address = "BC:24:11:5B:F7:EC"
-  }
-}
-
 resource "proxmox_virtual_environment_vm" "immich_vm" {
   name      = "immich"
   node_name = "pve01"
