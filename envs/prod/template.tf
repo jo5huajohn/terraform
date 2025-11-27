@@ -1,5 +1,5 @@
 data "local_file" "ssh_public_key" {
-  filename = "./reseau.pub"
+  filename = pathexpand("~/.ssh/reseau.pub")
 }
 
 data "local_file" "ssh_pub_key" {
