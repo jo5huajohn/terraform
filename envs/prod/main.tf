@@ -77,7 +77,7 @@ resource "proxmox_virtual_environment_vm" "mealie_vm" {
   }
 }
 
-resource "proxmox_virtual_environment_vm" "netboot_vm" {
+resource "proxmox_virtual_environment_vm" "vault_vm" {
   name      = "netboot"
   node_name = "pve01"
   tags      = [ "infra", "prod" ]
@@ -119,7 +119,7 @@ resource "proxmox_virtual_environment_vm" "netboot_vm" {
   }
 
   memory {
-    dedicated = 8192
+    dedicated = 2048
   }
 
   network_device {
