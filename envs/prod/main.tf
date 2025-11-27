@@ -1,7 +1,3 @@
-data "local_file" "ssh_public_key" {
-  filename = "./reseau.pub"
-}
-
 resource "proxmox_virtual_environment_vm" "immich_vm" {
   name      = "immich"
   node_name = "pve01"

@@ -1,12 +1,9 @@
-resource "proxmox_virtual_environment_file" "cloud_config" {
-  content_type = "snippets"
-  datastore_id = "local"
-  node_name    = "pve01"
-  overwrite    = true
+data "local_file" "ssh_public_key" {
+  filename = "./reseau.pub"
+}
 
-  source_file {
-    path = "./cloud-config.yml"
-  }
+data "local_file" "ssh_pub_key" {
+  filename = pathexpand("~/.ssh/id_ed25519.pub")
 }
 
 resource "proxmox_virtual_environment_vm" "ubuntu_noble_cloud_image_template" {
