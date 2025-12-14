@@ -1,11 +1,3 @@
-data "local_file" "ssh_public_key" {
-  filename = pathexpand("~/.ssh/reseau.pub")
-}
-
-data "local_file" "ssh_pub_key" {
-  filename = pathexpand("~/.ssh/id_ed25519.pub")
-}
-
 resource "proxmox_virtual_environment_vm" "fedora_43_cloud_image_template" {
   name      = "fedora-43-template"
   node_name = "pve01"
@@ -57,7 +49,7 @@ resource "proxmox_virtual_environment_vm" "fedora_43_cloud_image_template" {
 
     user_account {
       keys     = [
-        trimspace(data.local_file.ssh_pub_key.content)
+        trimspace(var.ssh_pub_key)
       ]
       password = "4452218"
       username = "admin"
@@ -153,7 +145,7 @@ resource "proxmox_virtual_environment_container" "debian_bookworm_lxc_template" 
 
     user_account {
       keys = [
-        trimspace(data.local_file.ssh_public_key.content)
+        trimspace(var.ssh_public_key)
       ]
       password = "4452218"
     }
