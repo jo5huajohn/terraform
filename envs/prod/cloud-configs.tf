@@ -19,17 +19,18 @@ resource "proxmox_virtual_environment_file" "k8s_user_data_cloud_config" {
     #cloud-config
     hostname: k8s-node
     timezone: America/Chicago
-    allow_public_ssh_keys: true
+
     users:
       - default
       - name: admin
-        sudo: ALL=(ALL) NOPASSWD:ALL
         groups:
           - wheel
-          - sudo
+        sudo:
+          - ALL=(ALL) NOPASSWD:ALL
         shell: /bin/bash
         ssh_authorized_keys:
-          - ${trimspace(data.local_file.ssh_pub_key.content)}
+          - ${trimspace(var.ssh_pub_key)}
+
     package_update: true
     runcmd:
       - echo "done" > /tmp/cloud-config.done

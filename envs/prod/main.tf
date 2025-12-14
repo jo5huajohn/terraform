@@ -111,7 +111,7 @@ resource "proxmox_virtual_environment_vm" "vault_vm" {
 
     user_account {
       keys     = [
-        trimspace(data.local_file.ssh_pub_key.content)
+        trimspace(var.ssh_pub_key)
       ]
       username = "${var.virtual_environment_vm_username}"
     }
@@ -353,7 +353,7 @@ resource "proxmox_virtual_environment_vm" "k8s-worker-dev" {
 
     user_account {
       keys     = [
-        trimspace(data.local_file.ssh_pub_key.content)
+        trimspace(var.ssh_pub_key)
       ]
       password = "4452218"
       username = "admin"
