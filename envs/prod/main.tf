@@ -78,7 +78,7 @@ resource "proxmox_virtual_environment_vm" "mealie_vm" {
 }
 
 resource "proxmox_virtual_environment_vm" "vault_vm" {
-  name      = "netboot"
+  name      = "vault"
   node_name = "pve01"
   tags      = [ "infra", "prod" ]
 
@@ -113,13 +113,8 @@ resource "proxmox_virtual_environment_vm" "vault_vm" {
       keys     = [
         trimspace(data.local_file.ssh_pub_key.content)
       ]
-      password = "4452218"
-      username = "admin"
+      username = "${var.virtual_environment_vm_username}"
     }
-  }
-
-  memory {
-    dedicated = 2048
   }
 
   network_device {
