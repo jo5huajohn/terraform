@@ -65,7 +65,7 @@ resource "proxmox_virtual_environment_vm" "fedora_43_cloud_image_template" {
   }
 
   memory {
-    dedicated = 2048
+    dedicated = 4096
   }
 
   operating_system {
