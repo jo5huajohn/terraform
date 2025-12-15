@@ -38,6 +38,7 @@ resource "proxmox_virtual_environment_vm" "fedora_43_cloud_image_template" {
 
   initialization {
     datastore_id = "vms"
+
     ip_config {
       ipv4 {
         address = "dhcp"
@@ -51,7 +52,6 @@ resource "proxmox_virtual_environment_vm" "fedora_43_cloud_image_template" {
       keys     = [
         trimspace(var.ssh_pub_key)
       ]
-      password = "4452218"
       username = "admin"
     }
   }
