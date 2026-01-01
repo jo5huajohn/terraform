@@ -18,7 +18,9 @@ variable "acme_dns_cf_zone_id" {
     description = "Cloudflare Zone ID for ACME DNS plugin"
 }
 
-variable "virtual_environment_ip"  {
+variable "virtual_environment_address"  {
+    type        = string
+    description = "Address of the node"
 }
 
 variable "virtual_environment_api_token" {
