@@ -355,7 +355,6 @@ resource "proxmox_virtual_environment_vm" "k8s-worker-dev" {
       keys     = [
         trimspace(var.ssh_pub_key)
       ]
-      password = "4452218"
       username = "admin"
     }
 
