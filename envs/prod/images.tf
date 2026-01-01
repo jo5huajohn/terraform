@@ -12,3 +12,11 @@ resource "proxmox_virtual_environment_download_file" "ubuntu_noble_cloud_image" 
   url          = "https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-amd64.img"
   file_name    = "noble-server-cloudimg-amd64.qcow2"
 }
+
+resource "proxmox_virtual_environment_download_file" "debian_trixie_cloud_lxc" {
+  content_type = "vztmpl"
+  datastore_id = "local"
+  node_name    = "pve01"
+  file_name    = "debian-trixie-cloud-amd64.tar.xz"
+  url          = "https://images.linuxcontainers.org/images/debian/trixie/amd64/cloud/20260101_05%3A24/rootfs.tar.xz"
+}
