@@ -167,7 +167,7 @@ resource "proxmox_virtual_environment_container" "debian_bookworm_lxc_template" 
   }
 }
 
-resource "proxmox_virtual_environment_container" "debian_trixie_cloud_lxc_template" {
+resource "proxmox_virtual_environment_container" "debian_trixie_lxc_template" {
   node_name = "pve01"
 
   template = true
@@ -198,7 +198,7 @@ resource "proxmox_virtual_environment_container" "debian_trixie_cloud_lxc_templa
   }
 
   operating_system {
-    template_file_id = proxmox_virtual_environment_download_file.debian_trixie_cloud_lxc.id
+    template_file_id = proxmox_virtual_environment_download_file.debian_trixie_lxc.id
     type             = "debian"
   }
 
