@@ -52,7 +52,7 @@ resource "proxmox_virtual_environment_vm" "fedora_43_cloud_image_template" {
       keys     = [
         trimspace(var.ssh_pub_key)
       ]
-      username = "admin"
+      username = var.virtual_environment_vm_username
     }
   }
 
@@ -147,7 +147,7 @@ resource "proxmox_virtual_environment_container" "debian_bookworm_lxc_template" 
       keys = [
         trimspace(var.ssh_public_key)
       ]
-      password = "4452218"
+      password = var.virtual_environment_user_account_password
     }
   }
 
@@ -157,6 +157,48 @@ resource "proxmox_virtual_environment_container" "debian_bookworm_lxc_template" 
 
   operating_system {
     template_file_id = "local:vztmpl/debian-12-standard_12.7-1_amd64.tar.zst"
+    type             = "debian"
+  }
+
+  unprivileged = true
+
+  features {
+    nesting = true
+  }
+}
+
+resource "proxmox_virtual_environment_container" "debian_trixie_cloud_lxc_template" {
+  node_name = "pve01"
+
+  template = true
+  started  = false
+
+  cpu {
+    cores = 1
+  }
+
+  disk {
+    datastore_id = "vms"
+    size         = 20
+  }
+
+  initialization {
+    hostname = "debian-trixie-cloud-template"
+
+    user_account {
+      keys = [
+        trimspace(var.ssh_pub_key)
+      ]
+      password = var.virtual_environment_user_account_password
+    }
+  }
+
+  memory {
+    dedicated = 1024
+  }
+
+  operating_system {
+    template_file_id = proxmox_virtual_environment_download_file.debian_trixie_cloud_lxc.id
     type             = "debian"
   }
 

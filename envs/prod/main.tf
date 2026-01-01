@@ -113,7 +113,7 @@ resource "proxmox_virtual_environment_vm" "vault_vm" {
       keys     = [
         trimspace(var.ssh_pub_key)
       ]
-      username = "${var.virtual_environment_vm_username}"
+      username = var.virtual_environment_vm_username
     }
   }
 
@@ -355,7 +355,7 @@ resource "proxmox_virtual_environment_vm" "k8s-worker-dev" {
       keys     = [
         trimspace(var.ssh_pub_key)
       ]
-      username = "admin"
+      username = var.virtual_environment_vm_username
     }
 
     meta_data_file_id = proxmox_virtual_environment_file.k8s_meta_data_cloud_config[each.key].id
