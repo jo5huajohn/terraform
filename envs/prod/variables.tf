@@ -1,3 +1,23 @@
+variable "acme_dns_cf_account_id" {
+    type        = string
+    description = "Cloudflare Account ID for ACME DNS plugin"
+}
+
+variable "acme_dns_cf_email" {
+    type        = string
+    description = "Email for ACME DNS plugin"
+}
+
+variable "acme_dns_cf_token" {
+    type        = string
+    description = "Cloudflare API token for ACME DNS plugin"
+}
+
+variable "acme_dns_cf_zone_id" {
+    type        = string
+    description = "Cloudflare Zone ID for ACME DNS plugin"
+}
+
 variable "virtual_environment_ip"  {
 }
 
