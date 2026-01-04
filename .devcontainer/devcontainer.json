@@ -3,7 +3,9 @@
 	"image": "mcr.microsoft.com/devcontainers/base:bookworm",
 
 	"features": {
-		"ghcr.io/devcontainers/features/terraform": {}
+		"ghcr.io/devcontainers/features/python:1": {},
+		"ghcr.io/devcontainers/features/terraform": {},
+		"ghcr.io/gvatsal60/dev-container-features/pre-commit:1": {}
 	},
 	"customizations": {
 		"vscode": {
@@ -11,5 +13,6 @@
 				"hashicorp.terraform"
 			]
 		}
-	}
+	},
+	"postCreateCommand": "pre-commit install"
 }
