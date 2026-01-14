@@ -1,14 +1,3 @@
-resource "proxmox_virtual_environment_acme_dns_plugin" "acme_cf" {
-  plugin = "cloudflare-dns-lab42"
-  api    = "cf"
-  data = {
-    CF_Account_ID = var.acme_dns_cf_account_id
-    CF_Email      = var.acme_dns_cf_email
-    CF_Token      = var.acme_dns_cf_token
-    CF_Zone_ID    = var.acme_dns_cf_zone_id
-  }
-}
-
 resource "proxmox_virtual_environment_vm" "immich_vm" {
   name      = "immich"
   node_name = "pve01"
@@ -41,7 +30,7 @@ resource "proxmox_virtual_environment_vm" "immich_vm" {
         address = "auto"
       }
     }
-  
+
     user_data_file_id = proxmox_virtual_environment_file.cloud_config.id
   }
 
@@ -354,7 +343,7 @@ resource "proxmox_virtual_environment_vm" "k8s-worker-dev" {
     dns {
       servers = each.value.dns_servers
     }
-    
+
     ip_config {
       ipv4 {
         address = each.value.ip_address
