@@ -77,52 +77,6 @@ resource "proxmox_virtual_environment_vm" "mealie_vm" {
   }
 }
 
-resource "proxmox_virtual_environment_vm" "vault_vm" {
-  name      = "vault"
-  node_name = "pve01"
-  tags      = [ "infra", "prod" ]
-
-  clone {
-    vm_id = proxmox_virtual_environment_vm.fedora_43_cloud_image_template.id
-  }
-
-  cpu {
-    cores = 2
-  }
-
-  disk {
-    datastore_id = "pve1"
-    interface    = "scsi1"
-    iothread     = true
-    discard      = "on"
-    size         = 128
-  }
-
-  initialization {
-    datastore_id = "vms"
-    ip_config {
-      ipv4 {
-        address = "dhcp"
-      }
-      ipv6 {
-        address = "auto"
-      }
-    }
-
-    user_account {
-      keys     = [
-        trimspace(var.ssh_pub_key)
-      ]
-      username = var.virtual_environment_vm_username
-    }
-  }
-
-  network_device {
-    bridge      = "vmbr0"
-    mac_address = "BC:24:11:81:EA:3E"
-  }
-}
-
 resource "proxmox_virtual_environment_container" "authentik_container" {
   node_name = "pve01"
   tags      = [ "infra", "prod" ]
