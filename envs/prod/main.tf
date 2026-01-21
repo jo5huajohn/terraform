@@ -40,7 +40,6 @@ resource "proxmox_virtual_environment_vm" "immich_vm" {
 
   network_device {
     bridge      = "vmbr0"
-    mac_address = "BC:24:11:80:EF:3E"
   }
 }
 
@@ -73,7 +72,6 @@ resource "proxmox_virtual_environment_vm" "mealie_vm" {
 
   network_device {
     bridge      = "vmbr0"
-    mac_address = "BC:24:11:91:3D:3A"
   }
 }
 
@@ -107,7 +105,6 @@ resource "proxmox_virtual_environment_container" "authentik_container" {
 
   network_interface {
     name        = "veth0"
-    mac_address = "BC:24:11:F7:C1:48"
   }
 }
 
@@ -133,7 +130,6 @@ resource "proxmox_virtual_environment_container" "caddy_container" {
 
   network_interface {
     name        = "veth0"
-    mac_address = "BC:24:11:89:4C:EE"
   }
 }
 
@@ -174,7 +170,6 @@ resource "proxmox_virtual_environment_container" "nextcloud_container" {
 
   network_interface {
     name        = "veth0"
-    mac_address = "BC:24:11:50:65:8C"
   }
 }
 
@@ -215,7 +210,6 @@ resource "proxmox_virtual_environment_container" "paperless_ngx_container" {
 
   network_interface {
     name        = "veth0"
-    mac_address = "BC:24:11:0B:1A:05"
   }
 }
 
