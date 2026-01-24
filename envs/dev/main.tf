@@ -1,54 +1,16 @@
-resource "proxmox_virtual_environment_container" "traefik" {
+module "traefik" {
+  source = "./catalog/modules/ingress"
+
   node_name = "pve01"
-  tags      = [ "infra", "dev" ]
+  tags = [ "dev", "infra" ]
 
-  cpu {
-    cores = 1
-  }
+  disk_storage = "vms"
 
-  disk {
-    datastore_id = "vms"
-    size         = 20
-  }
+  hostname = "traefik"
+  network_interface = "veth0"
 
-  initialization {
-    hostname = "traefik"
-
-    ip_config {
-      ipv4 {
-        address = "dhcp"
-      }
-      ipv6 {
-        address = "auto"
-      }
-    }
-
-    user_account {
-      keys = [
-        trimspace(var.ssh_pub_key)
-      ]
-      password = var.virtual_environment_user_account_password
-    }
-  }
-
-  memory {
-    dedicated = 1024
-  }
-
-  network_interface {
-    name        = "veth0"
-  }
-
-  operating_system {
-    template_file_id = "local:vztmpl/debian-13-standard_13.1-2_amd64.tar.zst"
-    type             = "debian"
-  }
-
-  unprivileged = true
-
-  features {
-    nesting = true
-  }
+  user_ssh_key_public = var.ssh_pub_key
+  user_password = var.virtual_environment_user_account_password
 }
 
 resource "proxmox_virtual_environment_vm" "vault" {
