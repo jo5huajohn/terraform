@@ -1,3 +1,21 @@
+module "pocket-id" {
+  source = "./catalog/modules/container"
+
+  node_name = "pve01"
+  tags      = [ "dev", "infra" ]
+
+  disk_storage = "vms"
+
+  hostname          = "pocket-id"
+  network_interface = "veth0"
+
+  os_template_id = "local:vztmpl/debian-13-standard_13.1-2_amd64.tar.zst"
+  os_type        = "debian"
+
+  user_ssh_key_public = var.ssh_pub_key
+  user_password       = var.virtual_environment_user_account_password
+}
+
 module "traefik" {
   source = "./catalog/modules/ingress"
 
