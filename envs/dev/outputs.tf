@@ -1,3 +1,7 @@
+output "pocket_id_ipv4_address" {
+  value = module.pocket-id.container_ipv4_address.veth0
+}
+
 output "traefik_ipv4_address" {
   value = module.traefik.ingress_ipv4_address
 }
