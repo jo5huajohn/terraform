@@ -15,6 +15,18 @@ variable "cores" {
   default     = 1
 }
 
+variable "mountpoint" {
+  type = list(object({
+    mp_volume    = optional(string, null)
+    mp_size      = optional(string, null)
+    mp_path      = optional(string, null)
+    mp_backup    = optional(bool, false)
+    mp_read_only = optional(bool, false)
+    }
+  ))
+  default = null
+}
+
 variable "memory" {
   description = "Amount of dedicated memory in MiB."
   type        = number

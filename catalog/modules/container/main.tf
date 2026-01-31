@@ -46,6 +46,17 @@ resource "proxmox_virtual_environment_container" "container" {
     dedicated = var.memory
   }
 
+  dynamic "mount_point" {
+    for_each = (var.mountpoint != null ? var.mountpoint : [])
+    content {
+      volume    = mount_point.value.mp_volume
+      size      = mount_point.value.mp_size
+      path      = mount_point.value.mp_path
+      backup    = mount_point.value.mp_backup
+      read_only = mount_point.value.mp_read_only
+    }
+  }
+
   network_interface {
     name = var.network_interface
   }
