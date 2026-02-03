@@ -1,5 +1,5 @@
 variable "node_name" {
-  description = "Name of the Proxmox node to provision the ingress container."
+  description = "Name of the Proxmox node to provision the virtual machine."
   type        = string
 }
 
@@ -66,13 +66,8 @@ variable "iothread" {
   default     = true
 }
 
-variable "hostname" {
-  description = "Hostname of the container."
-  type        = string
-}
-
-variable "network_interface" {
-  description = "Name of the network interface of the container."
+variable "network_bridge" {
+  description = "Name of the network bridge to use for the virtual machine."
   type        = string
 }
 
@@ -87,8 +82,8 @@ variable "user_ssh_key_public" {
   }
 }
 
-variable "user_password" {
-  description = "Password for container default user."
+variable "username" {
+  description = "Username of user in virtual machine."
   type        = string
   sensitive   = true
   default     = null

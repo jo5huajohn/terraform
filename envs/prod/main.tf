@@ -43,38 +43,6 @@ resource "proxmox_virtual_environment_vm" "immich_vm" {
   }
 }
 
-resource "proxmox_virtual_environment_vm" "mealie_vm" {
-  name      = "mealie"
-  node_name = "pve01"
-  tags      = [ "app", "prod" ]
-
-  clone {
-    vm_id = proxmox_virtual_environment_vm.ubuntu_noble_cloud_image_template.id
-  }
-
-  initialization {
-    datastore_id = "vms"
-    ip_config {
-      ipv4 {
-        address = "dhcp"
-      }
-      ipv6 {
-        address = "auto"
-      }
-    }
-
-    user_data_file_id = proxmox_virtual_environment_file.cloud_config.id
-  }
-
-  memory {
-    dedicated = 4096
-  }
-
-  network_device {
-    bridge      = "vmbr0"
-  }
-}
-
 resource "proxmox_virtual_environment_container" "authentik_container" {
   node_name = "pve01"
   tags      = [ "infra", "prod" ]
@@ -166,46 +134,6 @@ resource "proxmox_virtual_environment_container" "nextcloud_container" {
     volume = "pve1"
     path   = "/mnt/ncdata"
     size   = "128G"
-  }
-
-  network_interface {
-    name        = "veth0"
-  }
-}
-
-resource "proxmox_virtual_environment_container" "paperless_ngx_container" {
-  node_name = "pve01"
-  tags      = [ "app", "prod" ]
-
-  clone {
-   vm_id = proxmox_virtual_environment_container.debian_bookworm_lxc_template.id
-  }
-
-  cpu {
-    cores = 2
-  }
-
-  initialization {
-    hostname = "paperless"
-    ip_config {
-      ipv4 {
-        address = "dhcp"
-      }
-      ipv6 {
-        address = "auto"
-      }
-    }
-  }
-
-  memory {
-    dedicated = 4096
-  }
-
-  mount_point {
-    backup = true
-    volume = "pve1"
-    path   = "/mnt/paperless"
-    size   = "64G"
   }
 
   network_interface {
