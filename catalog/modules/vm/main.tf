@@ -57,10 +57,10 @@ resource "proxmox_virtual_environment_vm" "vm" {
     }
 
     user_account {
-      keys = [
+      keys     = [
         trimspace(var.user_ssh_key_public)
       ]
-      password = var.user_password
+      username = var.username
     }
   }
 
@@ -69,7 +69,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
   }
 
   network_device {
-    name = var.network_device
+    bridge = var.network_bridge
   }
 
   operating_system {
