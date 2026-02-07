@@ -122,6 +122,36 @@ module "mealie" {
   user_password       = var.virtual_environment_user_account_password
 }
 
+module "opencloud" {
+  source = "../../catalog/modules/container"
+
+  node_name = "pve01"
+  tags      = [ "dev", "app" ]
+
+  cores  = 2
+  memory = 4096
+
+  disk_storage = "vms"
+
+  mountpoint = [
+    {
+      mp_volume = "pve1"
+      mp_size   = "128G"
+      mp_path   = "/mnt/opencloud"
+      mp_backup = true
+    }
+  ]
+
+  hostname          = "opencloud"
+  network_interface = "veth0"
+
+  os_template_id = "local:vztmpl/debian-13-standard_13.1-2_amd64.tar.zst"
+  os_type        = "debian"
+
+  user_ssh_key_public = var.ssh_pub_key
+  user_password       = var.virtual_environment_user_account_password
+}
+
 module "paperless_ngx" {
   source = "../../catalog/modules/container"
 

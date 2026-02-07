@@ -14,6 +14,10 @@ output "mealie_ipv4_address" {
   value = module.mealie.container_ipv4_address.veth0
 }
 
+output "opencloud_ipv4_address" {
+  value = module.opencloud.container_ipv4_address.veth0
+}
+
 output "paperless_ngx_ipv4_address" {
   value = module.paperless_ngx.container_ipv4_address.veth0
 }
