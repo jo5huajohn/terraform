@@ -27,3 +27,21 @@ resource "pocketid_client" "mealie_app" {
     pocketid_group.users.id
   ]
 }
+
+resource "pocketid_client" "paperless_ngx_app" {
+  name = "Paperless-ngx"
+
+  callback_urls = [
+    "https://paperless.dev.lab42.me/accounts/oidc/pocket-id/login/callback/",
+  ]
+
+  is_public                 = false
+  pkce_enabled              = true
+  requires_reauthentication = true
+  launch_url = "https://paperless.dev.lab42.me"
+
+  allowed_user_groups = [
+    pocketid_group.admin.id,
+    pocketid_group.users.id
+  ]
+}
