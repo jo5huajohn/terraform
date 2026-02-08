@@ -20,7 +20,7 @@ resource "pocketid_client" "mealie_app" {
   is_public                 = false
   pkce_enabled              = true
   requires_reauthentication = true
-  launch_url = "https://mealie.dev.lab42.me"
+  launch_url = "https://mealie.dev.lab42.me/login"
 
   allowed_user_groups = [
     pocketid_group.admin.id,
