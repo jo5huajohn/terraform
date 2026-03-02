@@ -28,6 +28,27 @@ resource "pocketid_client" "mealie_app" {
   ]
 }
 
+resource "pocketid_client" "opencloud_app" {
+  name      = "OpenCloud"
+  client_id = "web"
+
+  callback_urls = [
+    "https://opencloud.dev.lab42.me/",
+    "https://opencloud.dev.lab42.me/oidc-callback.html",
+    "https://opencloud.dev.lab42.me/oidc-silent-redirect.html",
+  ]
+
+  is_public                 = true
+  pkce_enabled              = true
+  launch_url = "https://opencloud.dev.lab42.me"
+
+
+  allowed_user_groups = [
+    pocketid_group.admin.id,
+    pocketid_group.users.id
+  ]
+}
+
 resource "pocketid_client" "paperless_ngx_app" {
   name = "Paperless-ngx"
 
