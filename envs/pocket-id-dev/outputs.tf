@@ -7,6 +7,15 @@ output "mealie_client_secret" {
   sensitive = true
 }
 
+output "opencloud_client_id" {
+  value = pocketid_client.opencloud_app.client_id
+}
+
+output "opencloud_client_secret" {
+  value     = pocketid_client.opencloud_app.client_secret
+  sensitive = true
+}
+
 output "paperless_ngx_client_id" {
   value = pocketid_client.paperless_ngx_app.id
 }
