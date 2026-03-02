@@ -43,31 +43,6 @@ resource "proxmox_virtual_environment_vm" "immich_vm" {
   }
 }
 
-resource "proxmox_virtual_environment_container" "caddy_container" {
-  node_name = "pve01"
-  tags      = [ "infra", "prod" ]
-
-  clone {
-   vm_id = proxmox_virtual_environment_container.debian_bookworm_lxc_template.id
-  }
-
-  initialization {
-    hostname = "caddy"
-    ip_config {
-      ipv4 {
-        address = "dhcp"
-      }
-      ipv6 {
-        address = "auto"
-      }
-    }
-  }
-
-  network_interface {
-    name        = "veth0"
-  }
-}
-
 resource "proxmox_virtual_environment_container" "nextcloud_container" {
   node_name = "pve01"
   tags      = [ "app", "prod" ]
