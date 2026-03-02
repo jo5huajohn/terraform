@@ -43,46 +43,6 @@ resource "proxmox_virtual_environment_vm" "immich_vm" {
   }
 }
 
-resource "proxmox_virtual_environment_container" "nextcloud_container" {
-  node_name = "pve01"
-  tags      = [ "app", "prod" ]
-
-  clone {
-   vm_id = proxmox_virtual_environment_container.debian_bookworm_lxc_template.id
-  }
-
-  cpu {
-    cores = 2
-  }
-
-  initialization {
-    hostname = "nextcloud"
-    ip_config {
-      ipv4 {
-        address = "dhcp"
-      }
-      ipv6 {
-        address = "auto"
-      }
-    }
-  }
-
-  memory {
-    dedicated = 6144
-  }
-
-  mount_point {
-    backup = true
-    volume = "pve1"
-    path   = "/mnt/ncdata"
-    size   = "128G"
-  }
-
-  network_interface {
-    name        = "veth0"
-  }
-}
-
 locals {
   workers = {
     "virt-w01" = {
