@@ -111,3 +111,25 @@ module "paperless_ngx" {
   user_ssh_key_public = var.ssh_pub_key
   user_password       = var.virtual_environment_user_account_password
 }
+
+module "actual_budget" {
+  source = "../../catalog/modules/container"
+
+  node_name = "pve01"
+  tags      = [ "dev" , "app" ]
+
+  cores  = 1
+  memory = 512
+
+  disk_storage = "vms"
+  disk_size = 40
+
+  hostname          = "actual"
+  network_interface = "veth0"
+
+  os_template_id = "local:vztmpl/debian-13-standard_13.1-2_amd64.tar.zst"
+  os_type        = "debian"
+
+  user_ssh_key_public = var.ssh_pub_key
+  user_password       = var.virtual_environment_user_account_password
+}
