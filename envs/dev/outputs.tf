@@ -6,6 +6,10 @@ output "traefik_ipv4_address" {
   value = module.traefik.ingress_ipv4_address.veth0
 }
 
+output "actual_ipv4_address" {
+  value = module.actual_budget.container_ipv4_address.veth0
+}
+
 output "mealie_ipv4_address" {
   value = module.mealie.container_ipv4_address.veth0
 }

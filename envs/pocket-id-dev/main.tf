@@ -8,6 +8,23 @@ resource "pocketid_group" "users" {
   friendly_name = "users"
 }
 
+resource "pocketid_client" "actual_budget_app" {
+  name = "Actual Budget"
+
+  callback_urls = [
+    "https://budget.dev.lab42.me/openid/callback",
+  ]
+
+  is_public                 = false
+  pkce_enabled              = true
+  launch_url = "https://budget.dev.lab42.me/login"
+
+  allowed_user_groups = [
+    pocketid_group.admin.id,
+    pocketid_group.users.id
+  ]
+}
+
 resource "pocketid_client" "mealie_app" {
   name = "Mealie"
 
@@ -19,7 +36,6 @@ resource "pocketid_client" "mealie_app" {
 
   is_public                 = false
   pkce_enabled              = true
-  requires_reauthentication = true
   launch_url = "https://mealie.dev.lab42.me/login"
 
   allowed_user_groups = [
@@ -58,7 +74,6 @@ resource "pocketid_client" "paperless_ngx_app" {
 
   is_public                 = false
   pkce_enabled              = true
-  requires_reauthentication = true
   launch_url = "https://paperless.dev.lab42.me"
 
   allowed_user_groups = [

@@ -1,3 +1,12 @@
+output "actual_client_id" {
+  value = pocketid_client.actual_budget_app.id
+}
+
+output "actual_client_secret" {
+  value     = pocketid_client.actual_budget_app.client_secret
+  sensitive = true
+}
+
 output "mealie_client_id" {
   value = pocketid_client.mealie_app.id
 }
