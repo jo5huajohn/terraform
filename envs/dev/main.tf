@@ -31,6 +31,50 @@ module "traefik" {
   user_password = var.virtual_environment_user_account_password
 }
 
+module "grafana" {
+  source = "../../catalog/modules/container"
+
+  node_name = "pve01"
+  tags      = [ "dev" , "infra" ]
+
+  cores  = 1
+  memory = 1024
+
+  disk_storage = "vms"
+  disk_size = 20
+
+  hostname          = "grafana"
+  network_interface = "veth0"
+
+  os_template_id = "local:vztmpl/debian-13-standard_13.1-2_amd64.tar.zst"
+  os_type        = "debian"
+
+  user_ssh_key_public = var.ssh_pub_key
+  user_password       = var.virtual_environment_user_account_password
+}
+
+module "influxdb" {
+  source = "../../catalog/modules/container"
+
+  node_name = "pve01"
+  tags      = [ "dev" , "infra" ]
+
+  cores  = 2
+  memory = 2048
+
+  disk_storage = "vms"
+  disk_size = 20
+
+  hostname          = "influxdb"
+  network_interface = "veth0"
+
+  os_template_id = "local:vztmpl/debian-13-standard_13.1-2_amd64.tar.zst"
+  os_type        = "debian"
+
+  user_ssh_key_public = var.ssh_pub_key
+  user_password       = var.virtual_environment_user_account_password
+}
+
 module "mealie" {
   source = "../../catalog/modules/container"
 

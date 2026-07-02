@@ -6,6 +6,14 @@ output "traefik_ipv4_address" {
   value = module.traefik.ingress_ipv4_address.veth0
 }
 
+output "grafana_ipv4_address" {
+  value = module.grafana.container_ipv4_address.veth0
+}
+
+output "influxdb_ipv4_address" {
+  value = module.influxdb.container_ipv4_address.veth0
+}
+
 output "actual_ipv4_address" {
   value = module.actual_budget.container_ipv4_address.veth0
 }
