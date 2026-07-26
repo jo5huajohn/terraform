@@ -65,6 +65,43 @@ resource "pocketid_client" "opencloud_app" {
   ]
 }
 
+resource "pocketid_client" "opencloud_android_app" {
+  name      = "OpenCloud Android"
+  client_id = "OpenCloudAndroid"
+
+  callback_urls = [
+    "oc://android.opencloud.eu",
+  ]
+
+  is_public                 = true
+  pkce_enabled              = true
+  launch_url = "https://opencloud.dev.lab42.me"
+
+
+  allowed_user_groups = [
+    pocketid_group.admin.id,
+    pocketid_group.users.id
+  ]
+}
+
+resource "pocketid_client" "opencloud_ios_app" {
+  name      = "OpenCloud iOS"
+  client_id = "OpenCloudIOS"
+
+  callback_urls = [
+    "oc://ios.opencloud.eu",
+  ]
+
+  is_public                 = true
+  pkce_enabled              = true
+  launch_url = "https://opencloud.dev.lab42.me"
+
+  allowed_user_groups = [
+    pocketid_group.admin.id,
+    pocketid_group.users.id
+  ]
+}
+
 resource "pocketid_client" "paperless_ngx_app" {
   name = "Paperless-ngx"
 
