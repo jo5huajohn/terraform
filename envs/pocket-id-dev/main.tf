@@ -1,11 +1,19 @@
 resource "pocketid_group" "admin" {
   name          = "admin"
   friendly_name = "admin"
+
+  custom_claims = {
+    opencloudRoles = "admin"
+  }
 }
 
 resource "pocketid_group" "users" {
   name          = "users"
   friendly_name = "users"
+
+  custom_claims = {
+    opencloudRoles = "user"
+  }
 }
 
 resource "pocketid_client" "actual_budget_app" {
@@ -76,7 +84,6 @@ resource "pocketid_client" "opencloud_android_app" {
   is_public                 = true
   pkce_enabled              = true
   launch_url = "https://opencloud.dev.lab42.me"
-
 
   allowed_user_groups = [
     pocketid_group.admin.id,
