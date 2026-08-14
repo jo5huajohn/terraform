@@ -20,7 +20,7 @@ resource "proxmox_virtual_environment_vm" "ubuntu_noble_cloud_image_template" {
 
   disk {
     datastore_id = "vms"
-    import_from  = proxmox_virtual_environment_download_file.ubuntu_noble_cloud_image.id
+    import_from  = proxmox_download_file.ubuntu_noble_cloud_image.id
     interface    = "scsi0"
     iothread     = true
     discard      = "on"

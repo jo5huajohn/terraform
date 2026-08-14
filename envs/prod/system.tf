@@ -1,4 +1,4 @@
-resource "proxmox_virtual_environment_acme_dns_plugin" "acme_cf" {
+resource "proxmox_acme_dns_plugin" "acme_cf" {
   plugin = "cloudflare-dns-lab42"
   api    = "cf"
   data = {
