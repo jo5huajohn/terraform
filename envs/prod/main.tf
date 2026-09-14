@@ -70,7 +70,7 @@ resource "proxmox_virtual_environment_vm" "haos_vm" {
   }
 
    usb {
-    host    = "1-7"
+    host    = "1-14"
     usb3    = true
   }
 }
@@ -86,6 +86,7 @@ resource "proxmox_virtual_environment_vm" "immich_vm" {
 
   cpu {
     cores = 3
+    type  = "host"
   }
 
   disk {
