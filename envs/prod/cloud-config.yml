@@ -10,6 +10,7 @@ users:
     shell: /bin/bash
     ssh_authorized_keys:
       - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAk1Ebt3ZMranSa7Rl73iRiIYfm0XEXVAu6lBR7bhPYl reseau@pve
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN3tIjpmwOZ1vHHWAKvDNA1wPDqU/m9/hF64EVx7jQMC joshua@fedora
     sudo: ALL=(ALL) NOPASSWD:ALL
 package_update: true
 packages:
