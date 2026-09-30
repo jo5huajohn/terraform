@@ -16,6 +16,24 @@ resource "pocketid_group" "users" {
   }
 }
 
+resource "pocketid_group" "opencloud_spaceadmins" {
+  name  = "opencloud_spaceadmins"
+  friendly_name = "Opencloud Space Admins"
+
+  custom_claims = {
+    opencloudRoles = "opencloudSpaceAdmin"
+  }
+}
+
+resource "pocketid_group" "opencloud_guests" {
+  name  = "opencloud_guests"
+  friendly_name = "Opencloud Guests"
+
+  custom_claims = {
+    opencloudRoles = "opencloudGuest"
+  }
+}
+
 resource "pocketid_client" "actual_budget_app" {
   name = "Actual Budget"
 
@@ -65,11 +83,15 @@ resource "pocketid_client" "opencloud_app" {
   is_public                 = true
   pkce_enabled              = true
   launch_url = "https://opencloud.dev.lab42.me"
-
+  logout_callback_urls = [
+    "https://opencloud.dev.lab42.me/"
+  ]
 
   allowed_user_groups = [
     pocketid_group.admin.id,
-    pocketid_group.users.id
+    pocketid_group.users.id,
+    pocketid_group.opencloud_spaceadmins.id,
+    pocketid_group.opencloud_guests.id
   ]
 }
 
@@ -87,7 +109,9 @@ resource "pocketid_client" "opencloud_android_app" {
 
   allowed_user_groups = [
     pocketid_group.admin.id,
-    pocketid_group.users.id
+    pocketid_group.users.id,
+    pocketid_group.opencloud_spaceadmins.id,
+    pocketid_group.opencloud_guests.id
   ]
 }
 
@@ -105,7 +129,9 @@ resource "pocketid_client" "opencloud_ios_app" {
 
   allowed_user_groups = [
     pocketid_group.admin.id,
-    pocketid_group.users.id
+    pocketid_group.users.id,
+    pocketid_group.opencloud_spaceadmins.id,
+    pocketid_group.opencloud_guests.id
   ]
 }
 
