@@ -11,5 +11,5 @@ resource "proxmox_acme_dns_plugin" "acme_cf" {
 
 resource "proxmox_virtual_environment_time" "pve01_time" {
   node_name = "pve01"
-  time_zone = "America/Chicago"
+  time_zone = var.time_zone
 }
