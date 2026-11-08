@@ -1,18 +1,20 @@
 resource "pocketid_group" "admin" {
   name          = "admin"
-  friendly_name = "admin"
+  friendly_name = "Administrators"
 
   custom_claims = {
-    opencloudRoles = "admin"
+    opencloudRoles = "admin",
+    immichRole = "admin"
   }
 }
 
 resource "pocketid_group" "users" {
   name          = "users"
-  friendly_name = "users"
+  friendly_name = "Users"
 
   custom_claims = {
-    opencloudRoles = "user"
+    opencloudRoles = "user",
+    immichRole = "user"
   }
 }
 
@@ -49,6 +51,27 @@ resource "pocketid_client" "actual_budget_app" {
     pocketid_group.admin.id,
     pocketid_group.users.id
   ]
+}
+
+resource "pocketid_client" "immich_app" {
+  name = "Immich"
+
+  callback_urls = [
+    "https://immich.dev.lab42.me/auth/login",
+    "https://immich.dev.lab42.me/user-settings",
+    "app.immich:///oauth-callback"
+  ]
+
+  is_public                 = false
+  pkce_enabled              = true
+  launch_url = "https://immich.dev.lab42.me/login"
+
+  allowed_user_groups = [
+    pocketid_group.admin.id,
+    pocketid_group.users.id
+  ]
+
+
 }
 
 resource "pocketid_client" "mealie_app" {
