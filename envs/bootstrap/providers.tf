@@ -7,3 +7,11 @@ provider "proxmox" {
     username = "root"
   }
 }
+
+provider "system" {
+  ssh {
+    host = "${var.virtual_environment_address}"
+    agent = true
+    user = "root"
+  }
+}
