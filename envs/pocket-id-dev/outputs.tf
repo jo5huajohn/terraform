@@ -7,6 +7,15 @@ output "actual_client_secret" {
   sensitive = true
 }
 
+output "immich_client_id" {
+  value = pocketid_client.immich_app.id
+}
+
+output "immich_client_secret" {
+  value     = pocketid_client.immich_app.client_secret
+  sensitive = true
+}
+
 output "mealie_client_id" {
   value = pocketid_client.mealie_app.id
 }
