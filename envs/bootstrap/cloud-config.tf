@@ -1,3 +1,7 @@
+locals {
+  ansible_public_key = trimspace(file(var.ansible_public_key_path))
+}
+
 resource "proxmox_virtual_environment_file" "user_data_cloud_config" {
   content_type = "snippets"
   datastore_id = "local"
@@ -8,6 +12,7 @@ resource "proxmox_virtual_environment_file" "user_data_cloud_config" {
     data = <<-EOF
     #cloud-config
     timezone: ${var.time_zone}
+    allow_public_ssh_keys: true
     users:
       - name: ${var.virtual_environment_vm_username}
         shell: /bin/bash
@@ -16,7 +21,7 @@ resource "proxmox_virtual_environment_file" "user_data_cloud_config" {
         sudo: ALL=(ALL) NOPASSWD:ALL
         lock_passwd: true
         ssh_authorized_keys:
-          - ${var.ssh_public_key}
+          - ${local.ansible_public_key}
     package_update: true
     packages:
       - curl
@@ -30,7 +35,7 @@ resource "proxmox_virtual_environment_file" "user_data_cloud_config" {
   }
 }
 
-resource "proxmox_virtual_environment_file" "infisical_meta_data" {
+resource "proxmox_virtual_environment_file" "vault_meta_data" {
   content_type = "snippets"
   datastore_id = "local"
   node_name    = "pve01"
@@ -38,9 +43,9 @@ resource "proxmox_virtual_environment_file" "infisical_meta_data" {
   source_raw {
     data = <<-EOF
     #cloud-config
-    local-hostname: infisical
+    local-hostname: vault
     EOF
 
-    file_name = "infisical-meta-data.yaml"
+    file_name = "vault-meta-data.yaml"
   }
 }

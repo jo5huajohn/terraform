@@ -1,5 +1,5 @@
-resource "proxmox_virtual_environment_vm" "infisical_vm" {
-  name      = "infisical"
+resource "proxmox_virtual_environment_vm" "vault_vm" {
+  name      = "vault"
   node_name = "pve01"
   tags      = [ "infra", "bootstrap", "terraform" ]
 
@@ -46,12 +46,12 @@ resource "proxmox_virtual_environment_vm" "infisical_vm" {
       }
     }
 
-    meta_data_file_id = proxmox_virtual_environment_file.infisical_meta_data.id
+    meta_data_file_id = proxmox_virtual_environment_file.vault_meta_data.id
     user_data_file_id = proxmox_virtual_environment_file.user_data_cloud_config.id
   }
 
   memory {
-    dedicated = 4096
+    dedicated = 8192
   }
 
   network_device {

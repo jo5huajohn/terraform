@@ -44,14 +44,14 @@ variable "virtual_environment_vm_username" {
     sensitive   = true
 }
 
-variable "virtual_environment_user_account_password" {
-    description = "Password of user in virtual environment"
+variable "ssh_public_key_path" {
+    description = "Path to SSH public key"
     type        = string
     sensitive   = true
 }
 
-variable "ssh_public_key" {
-    description = "SSH public key for users"
+variable "ansible_public_key_path" {
+    description = "Path to the SSH public key for the Ansible user"
     type        = string
     sensitive   = true
 }
