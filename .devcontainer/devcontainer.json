@@ -14,5 +14,8 @@
 			]
 		}
 	},
-	"postCreateCommand": "pre-commit install"
+	"postCreateCommand": "pre-commit install",
+	"mounts": [
+	    "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,readonly,consistency=cached"
+	]
 }
